@@ -12,20 +12,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import pr5.controlador.Controlador;
-import pr5.modelo.Articulo;
-import pr5.modelo.Complemento;
-import pr5.modelo.Mascota;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
 
 public class PetShop extends JFrame {
 	private static final long serialVersionUID = 6181681095695644006L;
@@ -86,32 +82,7 @@ public class PetShop extends JFrame {
 		JButton btnModificarProducto = new JButton("Modificar Producto");
 		btnModificarProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(listaMascotas.getSelectedIndex() == -1 && listaComplementos.getSelectedIndex() == -1) {
-					JOptionPane.showMessageDialog(contentPane, "Debes seleccionar un artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				
-				String res = "";
-				if(listaMascotas.getSelectedIndex() != -1) {
-					res = listaMascotas.getSelectedValue();
-				} else {
-					res = listaComplementos.getSelectedValue();
-				}
-				long codigo = Long.parseLong(res.split(", ")[0]);
-				
-				Articulo art = controlador.buscarArticulo(codigo);
-				if(art == null) {
-					JOptionPane.showMessageDialog(contentPane, "Error al modificar el artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				
-				if(art instanceof Mascota) {
-					abrirVentanaModificar(codigo, true);
-				} else if(art instanceof Complemento) {
-					abrirVentanaModificar(codigo, false);
-				} else {
-					JOptionPane.showMessageDialog(contentPane, "Error al modificar el artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
-				}
+				controlador.abrirVentanaModificar(contentPane, yo, listaMascotas, listaComplementos);
 			}
 		});
 		btnModificarProducto.setBounds(10, 90, 171, 43);
@@ -203,39 +174,12 @@ public class PetShop extends JFrame {
 		this.setVisible(false);
 	}
 	
-	private void abrirVentanaModificar(long codigo, boolean mascota) {
+	public void abrirVentanaModificar(long codigo, boolean mascota) {
 		new VentanaModificar(this, codigo, mascota);
 		this.setVisible(false);
 	}
 	
 	public void buscarArticulos() {
-		DefaultListModel<String> modelMascotas = (DefaultListModel<String>) listaMascotas.getModel();
-		DefaultListModel<String> modelComplementos = (DefaultListModel<String>) listaComplementos.getModel();
-		modelMascotas.removeAllElements();
-		modelComplementos.removeAllElements();
-		if(tfCodigo.getText().length() > 0) {
-			try {
-				long codigo = Long.parseLong(tfCodigo.getText());
-				Articulo articulo = controlador.buscarArticulo(codigo);
-				if(articulo != null) {	
-					if(articulo instanceof Complemento) {
-						modelComplementos.addElement(articulo.toString());
-					} else if(articulo instanceof Mascota) {
-						modelMascotas.addElement(articulo.toString());
-					}
-				}
-				tfCodigo.setText("");
-			} catch(Exception e) {
-				
-			}		
-			return;
-		}
-		for(Articulo art : controlador.getArticulos()) {
-			if(art instanceof Complemento) {
-				modelComplementos.addElement(art.toString());
-			} else if(art instanceof Mascota) {
-				modelMascotas.addElement(art.toString());
-			}
-		}
+		controlador.buscarArticulo(listaMascotas, listaComplementos, tfCodigo);
 	}
 }

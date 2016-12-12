@@ -1,7 +1,7 @@
 package pr5.controlador;
 
-import java.util.List;
-
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -116,8 +116,35 @@ public class Controlador {
 		tienda.guardarArticulos();
 	}
 	
-	public Articulo buscarArticulo(long codigo) {
-		return tienda.buscarArticulo(codigo);
+	public void buscarArticulo(JList<String> listaMascotas, JList<String> listaComplementos, JTextField tfCodigo) {
+		DefaultListModel<String> modelMascotas = (DefaultListModel<String>) listaMascotas.getModel();
+		DefaultListModel<String> modelComplementos = (DefaultListModel<String>) listaComplementos.getModel();
+		modelMascotas.removeAllElements();
+		modelComplementos.removeAllElements();
+		if(tfCodigo.getText().length() > 0) {
+			try {
+				long codigo = Long.parseLong(tfCodigo.getText());
+				Articulo articulo = tienda.buscarArticulo(codigo);
+				if(articulo != null) {	
+					if(articulo instanceof Complemento) {
+						modelComplementos.addElement(articulo.toString());
+					} else if(articulo instanceof Mascota) {
+						modelMascotas.addElement(articulo.toString());
+					}
+				}
+				tfCodigo.setText("");
+			} catch(Exception e) {
+				
+			}		
+			return;
+		}
+		for(Articulo art : tienda.getArticulos()) {
+			if(art instanceof Complemento) {
+				modelComplementos.addElement(art.toString());
+			} else if(art instanceof Mascota) {
+				modelMascotas.addElement(art.toString());
+			}
+		}
 	}
 	
 	public void modificarArticulo(JPanel contentPanel, boolean isMascota, PetShop shop, VentanaModificar ventana, JTextField tfCodigo, JTextField tfFecha, JTextField tfDescripcion, JSpinner spExistencias) {
@@ -167,7 +194,51 @@ public class Controlador {
 		}
 	}
 	
-	public List<Articulo> getArticulos() {
-		return tienda.getArticulos();
+	public void abrirVentanaModificar(JPanel contentPane, PetShop shop, JList<String> listaMascotas, JList<String> listaComplementos) {
+		if(listaMascotas.getSelectedIndex() == -1 && listaComplementos.getSelectedIndex() == -1) {
+			JOptionPane.showMessageDialog(contentPane, "Debes seleccionar un artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		String res = "";
+		if(listaMascotas.getSelectedIndex() != -1) {
+			res = listaMascotas.getSelectedValue();
+		} else {
+			res = listaComplementos.getSelectedValue();
+		}
+		long codigo = Long.parseLong(res.split(", ")[0]);
+		
+		Articulo art = tienda.buscarArticulo(codigo);
+		if(art == null) {
+			JOptionPane.showMessageDialog(contentPane, "Error al modificar el artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		if(art instanceof Mascota) {
+			shop.abrirVentanaModificar(codigo, true);
+		} else if(art instanceof Complemento) {
+			shop.abrirVentanaModificar(codigo, false);
+		} else {
+			JOptionPane.showMessageDialog(contentPane, "Error al modificar el artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void cargarDatos(boolean isMascota, long codigo, JLabel labelFecha, JLabel labelMascota, JTextField tfCodigo, JTextField tfDescripcion, JTextField tfFecha, JSpinner spExistencias) {
+		if(!isMascota) {
+			labelFecha.setText("Fecha de Caducidad");
+			labelMascota.setText("MODIFICAR COMPLEMENTO");
+			
+			Complemento comp = (Complemento) tienda.buscarArticulo(codigo);
+			tfCodigo.setText(comp.getCodigo()+"");
+			tfDescripcion.setText(comp.getDescripcion());
+			tfFecha.setText(comp.getFechaCaducidad().toString());
+			spExistencias.setValue(comp.getExistencias());
+		} else {
+			Mascota masc = (Mascota) tienda.buscarArticulo(codigo);
+			tfCodigo.setText(masc.getCodigo()+"");
+			tfDescripcion.setText(masc.getDescripcion());
+			tfFecha.setText(masc.getFechaNacimiento().toString());
+			spExistencias.setValue(masc.getExistencias());
+		}
 	}
 }

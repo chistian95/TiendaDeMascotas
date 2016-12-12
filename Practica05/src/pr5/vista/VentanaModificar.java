@@ -15,8 +15,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import pr5.controlador.Controlador;
-import pr5.modelo.Complemento;
-import pr5.modelo.Mascota;
 
 public class VentanaModificar extends JDialog {
 	private static final long serialVersionUID = 7539104626634536748L;
@@ -99,24 +97,8 @@ public class VentanaModificar extends JDialog {
 		button_1.setBounds(10, 182, 324, 23);
 		contentPanel.add(button_1);
 		
-		controlador = Controlador.getInstance();
-		
-		if(!mascota) {
-			labelFecha.setText("Fecha de Caducidad");
-			labelMascota.setText("MODIFICAR COMPLEMENTO");
-			
-			Complemento comp = (Complemento) controlador.buscarArticulo(codigo);
-			tfCodigo.setText(comp.getCodigo()+"");
-			tfDescripcion.setText(comp.getDescripcion());
-			tfFecha.setText(comp.getFechaCaducidad().toString());
-			spExistencias.setValue(comp.getExistencias());
-		} else {
-			Mascota masc = (Mascota) controlador.buscarArticulo(codigo);
-			tfCodigo.setText(masc.getCodigo()+"");
-			tfDescripcion.setText(masc.getDescripcion());
-			tfFecha.setText(masc.getFechaNacimiento().toString());
-			spExistencias.setValue(masc.getExistencias());
-		}		
+		controlador = Controlador.getInstance();		
+		controlador.cargarDatos(mascota, codigo, labelFecha, labelMascota, tfCodigo, tfDescripcion, tfFecha, spExistencias);
 		
 		setVisible(true);
 	}
