@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -16,9 +15,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import pr5.controlador.Controlador;
-import pr5.modelo.Complemento;
-import pr5.modelo.Fecha;
-import pr5.modelo.Mascota;
 
 public class VentanaCrear extends JDialog {
 	private static final long serialVersionUID = -4129377478680923191L;
@@ -83,53 +79,7 @@ public class VentanaCrear extends JDialog {
 		JButton btnCrearMascota = new JButton("ACEPTAR");
 		btnCrearMascota.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					if(tfCodigo.getText().length() <= 0 || tfFecha.getText().length() <= 0 || tfDescripcion.getText().length() <= 0) {
-						JOptionPane.showMessageDialog(contentPanel, "Debes rellenar todos los campos!", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					
-					long codigo = Long.parseLong(tfCodigo.getText());					
-					if(controlador.buscarArticulo(codigo) != null) {
-						JOptionPane.showMessageDialog(contentPanel, "Este artículo ya existe!", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					
-					int existencias = Integer.parseInt(spExistencias.getValue().toString());
-					
-					Fecha fecha = null;
-					if(Fecha.comprobar(tfFecha.getText())) {
-						fecha = Fecha.crearFecha(tfFecha.getText());
-					} else {
-						JOptionPane.showMessageDialog(contentPanel, "La fecha no es correcta!", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					
-					if(mascota) {
-						Mascota mascota = new Mascota(codigo, tfDescripcion.getText(), existencias, fecha);
-						if(controlador.introducirArticulo(mascota)) {
-							tienda.buscarArticulos();
-							JOptionPane.showMessageDialog(contentPanel, "Mascota creada!");
-						} else {
-							JOptionPane.showMessageDialog(contentPanel, "Ha ocurrido un error al crear la mascota!", "Error!", JOptionPane.ERROR_MESSAGE);
-						}
-					} else {
-						Complemento complemento = new Complemento(codigo, tfDescripcion.getText(), existencias, fecha);
-						if(controlador.introducirArticulo(complemento)) {
-							tienda.buscarArticulos();
-							JOptionPane.showMessageDialog(contentPanel, "Complemento creado!");
-						} else {
-							JOptionPane.showMessageDialog(contentPanel, "Ha ocurrido un error al crear el complemento!", "Error!", JOptionPane.ERROR_MESSAGE);
-						}
-					}
-					
-					tfCodigo.setText("");
-					tfFecha.setText("");
-					tfDescripcion.setText("");
-					spExistencias.setValue(0);
-				} catch(Exception e) {
-					JOptionPane.showMessageDialog(contentPanel, "Ha ocurrido un error al crear el artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
-				}
+				controlador.introducirArticulo(contentPanel, tienda, mascota, tfCodigo, tfDescripcion, spExistencias, tfFecha);
 			}
 		});
 		btnCrearMascota.setBounds(10, 148, 354, 23);

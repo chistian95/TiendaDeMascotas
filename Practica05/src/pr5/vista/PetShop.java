@@ -50,6 +50,8 @@ public class PetShop extends JFrame {
 	}
 
 	public PetShop() {
+		final PetShop yo = this;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 447);
 		contentPane = new JPanel();
@@ -118,30 +120,7 @@ public class PetShop extends JFrame {
 		JButton btnEliminarProducto = new JButton("Eliminar Producto");
 		btnEliminarProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(listaMascotas.getSelectedIndex() == -1 && listaComplementos.getSelectedIndex() == -1) {
-					JOptionPane.showMessageDialog(contentPane, "Debes seleccionar un artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				
-				if(JOptionPane.showConfirmDialog(contentPane, "Deseas borrar este artículo?") != 0) {
-					return;
-				}
-				
-				String res = "";
-				if(listaMascotas.getSelectedIndex() != -1) {
-					res = listaMascotas.getSelectedValue();
-					
-				} else {
-					res = listaComplementos.getSelectedValue();				
-				}	
-				
-				long codigo = Long.parseLong(res.split(", ")[0]);
-				if(controlador.eliminarArticulo(codigo)) {
-					buscarArticulos();
-					JOptionPane.showMessageDialog(contentPane, "Artículo eliminado!");
-				} else {
-					JOptionPane.showMessageDialog(contentPane, "Error al borrar artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
-				}
+				controlador.elminarArticulo(contentPane, yo, listaMascotas, listaComplementos);
 			}
 		});
 		btnEliminarProducto.setBounds(403, 90, 171, 43);

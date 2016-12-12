@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -17,7 +16,6 @@ import javax.swing.border.EmptyBorder;
 
 import pr5.controlador.Controlador;
 import pr5.modelo.Complemento;
-import pr5.modelo.Fecha;
 import pr5.modelo.Mascota;
 
 public class VentanaModificar extends JDialog {
@@ -31,6 +29,8 @@ public class VentanaModificar extends JDialog {
 	private Controlador controlador;
 	
 	public VentanaModificar(final PetShop ventana, final long codigo, boolean mascota) {
+		final VentanaModificar yo = this;
+		
 		setBounds(100, 100, 360, 253);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -83,50 +83,7 @@ public class VentanaModificar extends JDialog {
 		JButton button = new JButton("ACEPTAR");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					if(tfCodigo.getText().length() <= 0 || tfFecha.getText().length() <= 0 || tfDescripcion.getText().length() <= 0) {
-						JOptionPane.showMessageDialog(contentPanel, "Debes rellenar todos los campos!", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					
-					if(JOptionPane.showConfirmDialog(contentPanel, "Deseas modificar este artículo?") != 0) {
-						return;
-					}
-					
-					long codigo = Long.parseLong(tfCodigo.getText());
-					int existencias = Integer.parseInt(spExistencias.getValue().toString());
-					
-					Fecha fecha = null;
-					if(Fecha.comprobar(tfFecha.getText())) {
-						fecha = Fecha.crearFecha(tfFecha.getText());
-					} else {
-						JOptionPane.showMessageDialog(contentPanel, "La fecha no es correcta!", "Error!", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					
-					if(mascota) {
-						Mascota mascota = new Mascota(codigo, tfDescripcion.getText(), existencias, fecha);
-						if(controlador.modificarArticulo(mascota)) {
-							ventana.buscarArticulos();
-							JOptionPane.showMessageDialog(contentPanel, "Mascota modificado!");
-						} else {
-							JOptionPane.showMessageDialog(contentPanel, "Ha ocurrido un error al modificar la mascota!", "Error!", JOptionPane.ERROR_MESSAGE);
-						}
-					} else {
-						Complemento complemento = new Complemento(codigo, tfDescripcion.getText(), existencias, fecha);
-						if(controlador.modificarArticulo(complemento)) {
-							ventana.buscarArticulos();
-							JOptionPane.showMessageDialog(contentPanel, "Complemento modificado!");
-						} else {
-							JOptionPane.showMessageDialog(contentPanel, "Ha ocurrido un error al modificar el complemento!", "Error!", JOptionPane.ERROR_MESSAGE);
-						}
-					}
-					
-					ventana.setVisible(true);
-					dispose();
-				} catch(Exception ex) {
-					JOptionPane.showMessageDialog(contentPanel, "Ha ocurrido un error al modificar el artículo!", "Error!", JOptionPane.ERROR_MESSAGE);
-				}
+				controlador.modificarArticulo(contentPanel, mascota, ventana, yo, tfCodigo, tfFecha, tfDescripcion, spExistencias);
 			}
 		});
 		button.setBounds(10, 148, 324, 23);
