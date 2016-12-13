@@ -1,7 +1,9 @@
 package pr5.vista;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -51,17 +53,24 @@ public class PetShop extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 447);
 		contentPane = new JPanel();
+		contentPane.setBackground(SystemColor.info);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblTiendaDeMascotas = new JLabel("TIENDA DE MASCOTAS");
+		lblTiendaDeMascotas.setOpaque(true);
+		lblTiendaDeMascotas.setForeground(new Color(0, 0, 0));
+		lblTiendaDeMascotas.setBackground(new Color(245, 222, 179));
 		lblTiendaDeMascotas.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblTiendaDeMascotas.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTiendaDeMascotas.setBounds(10, 11, 564, 14);
+		lblTiendaDeMascotas.setBounds(10, 5, 564, 25);
 		contentPane.add(lblTiendaDeMascotas);
 		
 		JButton btnIntroducirMascota = new JButton("Introducir Mascota");
+		btnIntroducirMascota.setFocusable(false);
+		btnIntroducirMascota.setBackground(SystemColor.textHighlight);
+		btnIntroducirMascota.setForeground(SystemColor.inactiveCaptionBorder);
 		btnIntroducirMascota.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				abrirVentanaCrear(true);
@@ -71,6 +80,9 @@ public class PetShop extends JFrame {
 		contentPane.add(btnIntroducirMascota);
 		
 		JButton btnIntroducirComplemento = new JButton("Introducir Complemento");
+		btnIntroducirComplemento.setFocusable(false);
+		btnIntroducirComplemento.setBackground(SystemColor.textHighlight);
+		btnIntroducirComplemento.setForeground(SystemColor.inactiveCaptionBorder);
 		btnIntroducirComplemento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				abrirVentanaCrear(false);
@@ -80,6 +92,9 @@ public class PetShop extends JFrame {
 		contentPane.add(btnIntroducirComplemento);
 		
 		JButton btnModificarProducto = new JButton("Modificar Producto");
+		btnModificarProducto.setFocusable(false);
+		btnModificarProducto.setBackground(SystemColor.textHighlight);
+		btnModificarProducto.setForeground(SystemColor.inactiveCaptionBorder);
 		btnModificarProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controlador.abrirVentanaModificar(contentPane, yo, listaMascotas, listaComplementos);
@@ -89,6 +104,9 @@ public class PetShop extends JFrame {
 		contentPane.add(btnModificarProducto);
 		
 		JButton btnEliminarProducto = new JButton("Eliminar Producto");
+		btnEliminarProducto.setFocusable(false);
+		btnEliminarProducto.setBackground(SystemColor.textHighlight);
+		btnEliminarProducto.setForeground(SystemColor.inactiveCaptionBorder);
 		btnEliminarProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controlador.elminarArticulo(contentPane, yo, listaMascotas, listaComplementos);
@@ -120,6 +138,8 @@ public class PetShop extends JFrame {
 		tfCodigo.setColumns(10);
 		
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBackground(SystemColor.textHighlight);
+		btnBuscar.setForeground(SystemColor.inactiveCaptionBorder);
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscarArticulos();

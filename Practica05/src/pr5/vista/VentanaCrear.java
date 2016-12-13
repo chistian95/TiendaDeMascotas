@@ -15,6 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import pr5.controlador.Controlador;
+import java.awt.Color;
+import java.awt.SystemColor;
 
 public class VentanaCrear extends JDialog {
 	private static final long serialVersionUID = -4129377478680923191L;
@@ -29,16 +31,20 @@ public class VentanaCrear extends JDialog {
 	private JButton btnSalir;
 
 	public VentanaCrear(final PetShop tienda, boolean mascota) {
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 390, 256);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(SystemColor.info);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		labelMascota = new JLabel("CREAR MASCOTA");
+		labelMascota.setOpaque(true);
+		labelMascota.setBackground(new Color(245, 222, 179));
 		labelMascota.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelMascota.setHorizontalAlignment(SwingConstants.CENTER);
-		labelMascota.setBounds(10, 11, 354, 14);
+		labelMascota.setBounds(10, 6, 354, 25);
 		contentPanel.add(labelMascota);
 		
 		tfCodigo = new JTextField();
@@ -77,6 +83,8 @@ public class VentanaCrear extends JDialog {
 		contentPanel.add(spExistencias);
 		
 		JButton btnCrearMascota = new JButton("ACEPTAR");
+		btnCrearMascota.setForeground(SystemColor.inactiveCaptionBorder);
+		btnCrearMascota.setBackground(SystemColor.textHighlight);
 		btnCrearMascota.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				controlador.introducirArticulo(contentPanel, tienda, mascota, tfCodigo, tfDescripcion, spExistencias, tfFecha);
@@ -86,6 +94,8 @@ public class VentanaCrear extends JDialog {
 		contentPanel.add(btnCrearMascota);
 		
 		btnSalir = new JButton("SALIR");
+		btnSalir.setForeground(SystemColor.inactiveCaptionBorder);
+		btnSalir.setBackground(SystemColor.textHighlight);
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				tienda.setVisible(true);

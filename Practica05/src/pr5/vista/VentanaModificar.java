@@ -15,6 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import pr5.controlador.Controlador;
+import java.awt.Color;
+import java.awt.SystemColor;
 
 public class VentanaModificar extends JDialog {
 	private static final long serialVersionUID = 7539104626634536748L;
@@ -27,18 +29,22 @@ public class VentanaModificar extends JDialog {
 	private Controlador controlador;
 	
 	public VentanaModificar(final PetShop ventana, final long codigo, boolean mascota) {
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		final VentanaModificar yo = this;
 		
 		setBounds(100, 100, 360, 253);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(SystemColor.info);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		labelMascota = new JLabel("MODIFICAR MASCOTA");
+		labelMascota.setOpaque(true);
+		labelMascota.setBackground(new Color(245, 222, 179));
 		labelMascota.setHorizontalAlignment(SwingConstants.CENTER);
 		labelMascota.setFont(new Font("Tahoma", Font.BOLD, 14));
-		labelMascota.setBounds(10, 11, 324, 14);
+		labelMascota.setBounds(10, 8, 324, 25);
 		contentPanel.add(labelMascota);
 		
 		JLabel label_1 = new JLabel("C\u00F3digo");
@@ -79,6 +85,8 @@ public class VentanaModificar extends JDialog {
 		contentPanel.add(spExistencias);
 		
 		JButton button = new JButton("ACEPTAR");
+		button.setForeground(SystemColor.inactiveCaptionBorder);
+		button.setBackground(SystemColor.textHighlight);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controlador.modificarArticulo(contentPanel, mascota, ventana, yo, tfCodigo, tfFecha, tfDescripcion, spExistencias);
@@ -88,6 +96,8 @@ public class VentanaModificar extends JDialog {
 		contentPanel.add(button);
 		
 		JButton button_1 = new JButton("SALIR");
+		button_1.setForeground(SystemColor.inactiveCaptionBorder);
+		button_1.setBackground(SystemColor.textHighlight);
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ventana.setVisible(true);
